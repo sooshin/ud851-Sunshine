@@ -29,6 +29,7 @@ dependencies {
     compile 'com.android.support:preference-v7:25.0.1'
 
     // TODO (1) Add the FirebaseJobDispatcher dependency to the project
+    compile 'com.firebase:firebase-jobdispatcher:0.8.5'
 
     // Instrumentation dependencies use androidTestCompile
     // (as opposed to testCompile for local unit tests run in the JVM)
