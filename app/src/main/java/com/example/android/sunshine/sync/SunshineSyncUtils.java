@@ -37,7 +37,7 @@ public class SunshineSyncUtils {
 //  TODO (10) Add constant values to sync Sunshine every 3 - 4 hours
     private static final int SYNC_INTERVAL_HOURS = 3;
     private static final int SYNC_INTERVAL_SECONDS = (int) (TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS));
-    private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS/3;
+    private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
 
     private static boolean sInitialized;
 
@@ -45,9 +45,7 @@ public class SunshineSyncUtils {
     private static final String SUNSHINE_SYNC_TAG = "sunshine_sync_tag";
 
 //  TODO (12) Create a method to schedule our periodic weather sync
-    synchronized public static void scheduleFirebaseJobDispatcherSync(@NonNull final Context context) {
-
-        if (sInitialized) return;
+    static void scheduleFirebaseJobDispatcherSync(@NonNull final Context context) {
 
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
@@ -55,18 +53,16 @@ public class SunshineSyncUtils {
         Job sunshineSyncJob = dispatcher.newJobBuilder()
                 .setService(SunshineFirebaseJobService.class)
                 .setTag(SUNSHINE_SYNC_TAG)
-                .setConstraints(Constraint.ON_UNMETERED_NETWORK)
+                .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setLifetime(Lifetime.FOREVER)
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(
                         SYNC_INTERVAL_SECONDS,
-                        SYNC_INTERVAL_HOURS + SYNC_FLEXTIME_SECONDS))
+                        SYNC_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS))
                 .setReplaceCurrent(true)
                 .build();
 
         dispatcher.schedule(sunshineSyncJob);
-
-        sInitialized = true;
     }
 
     /**
