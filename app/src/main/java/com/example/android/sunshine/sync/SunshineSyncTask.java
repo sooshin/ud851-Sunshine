@@ -1,5 +1,6 @@
 package com.example.android.sunshine.sync;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 
@@ -17,25 +18,29 @@ public class SunshineSyncTask {
 
 //      TODO (3) Within syncWeather, fetch new weather data
 
-        URL weatherRequestUrl = NetworkUtils.getUrl(context);
         try {
+            URL weatherRequestUrl = NetworkUtils.getUrl(context);
             String jsonWeatherResponse = NetworkUtils
                     .getResponseFromHttpUrl(weatherRequestUrl);
 
-            ContentValues[] simpleJsonWeatherData = OpenWeatherJsonUtils
+            ContentValues[] weatherValues = OpenWeatherJsonUtils
                     .getWeatherContentValuesFromJson(context, jsonWeatherResponse);
 
 //      TODO (4) If we have valid results, delete the old data and insert the new
-            if (simpleJsonWeatherData != null) {
-                context.getContentResolver().delete(
+            if (weatherValues != null && weatherValues.length != 0) {
+                ContentResolver sunshineContentResolver = context.getContentResolver();
+
+                sunshineContentResolver.delete(
                         WeatherContract.WeatherEntry.CONTENT_URI,
                         null,
                         null);
 
-                context.getContentResolver().bulkInsert(
+                sunshineContentResolver.bulkInsert(
                         WeatherContract.WeatherEntry.CONTENT_URI,
-                        simpleJsonWeatherData);
+                        weatherValues);
             }
+
+            /* If the code reaches this point, we have successfully performed our sync */
 
         } catch (Exception e) {
             e.printStackTrace();
