@@ -104,6 +104,8 @@
 
     <string name="pref_last_notification">last_notification</string>
 
+    <string name="main_notification_channel_name">Primary</string>
+
 
 
     <!-- - - - - - - - - - - - - - -
