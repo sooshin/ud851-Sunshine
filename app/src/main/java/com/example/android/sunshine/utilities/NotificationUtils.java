@@ -105,7 +105,6 @@ public class NotificationUtils {
                     .setLargeIcon(largeIcon)
                     .setContentTitle(notificationTitle)
                     .setContentText(notificationText)
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationText))
                     .setAutoCancel(true);
 //          TODO (3) Create an Intent with the proper URI to start the DetailActivity
             Intent intent = new Intent(context, DetailActivity.class);
